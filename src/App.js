@@ -16,9 +16,13 @@ class App extends React.Component {
     super(props);
     this.state = {
       city: '',
-      cityData: [],
+      cityData: {},
       error: false,
-      errorMessage: ''
+      errorMessage: '',
+      mapData: '',
+      lat: '',
+      lon: '',
+
     }
   }
 
@@ -37,7 +41,7 @@ class App extends React.Component {
   getCityData = async (e) => {
     e.preventDefault();
     console.log(this.state.city);
-
+    let response;
     try {
       // TODO: get data back from LocationIQ
       // Use axios to make my API call
@@ -45,25 +49,60 @@ class App extends React.Component {
       // define my URL to send to axios:
       let url = `https://us1.locationiq.com/v1/search?key=${process.env.REACT_APP_LOCATIONIQ_API_KEY}&q=${this.state.city}&format=json`
 
-      let cityData = await axios.get(url);
+      console.log(url)
+      
 
-      console.log(cityData.data[0]);
+      
+   
+       response = await axios.get(url);
+    
+      console.log(response)
+      let location = response.data[0];
+
+
+      console.log(location);
+      console.log(location.lat)
       this.setState({
-        cityData: cityData.data[0],
-        error: false
+        cityData: location,
+        error: false,
+        lat: location.lat,
+        lon: location.lon,
+      }, ()=> {
+        this.getMapData();
       });
 
-      // FOR YOUR LAB YOU WILL NEED TO GET A MAP IMAGE SRC. Example:
-      // `https://maps.locationiq.com/v3/staticmap?key=${process.env.REACT_APP_LOCATIONIQ_API_KEY}&center=47.6038321,-122.3300624&zoom=10`
-
+      console.log(this.state.cityData)
+      
     } catch (error) {
       console.log(error);
       this.setState({
         error: true,
         errorMessage: error.message
       })
+
     }
   }
+
+
+
+  getMapData = async () => {
+
+  console.log(this.state.lon);
+  let urlmap = `https://maps.locationiq.com/v3/staticmap?key=${process.env.REACT_APP_LOCATIONIQ_API_KEY}&center=${this.state.lat},${this.state.lon}&zoom=10`
+
+
+  console.log(process.env.REACT_APP_LOCATIONIQ_API_KEY)
+
+  let mapFind = await axios.get(urlmap);
+  console.log(mapFind)
+  const map = mapFind.config.url;
+
+  this.setState({
+    mapData: map
+  })
+    console.log(this.state.cityData.lat)
+  console.log(urlmap)
+}
 
   render() {
 
@@ -87,21 +126,23 @@ class App extends React.Component {
 
 
           {/* Ternary W ? T : F */}
-          <div className="bg-light border"> 
-          {
+          <div className="bg-light border">
+            {
 
-            this.state.error
-              ?
-              <p>{this.state.errorMessage}</p>
-              :
-              <p>
-              {this.state.cityData.display_name}
-                {this.state.cityData.lat}
-                {this.state.cityData.lon}
+              this.state.error
+                ?
+                <p>{this.state.errorMessage}</p>
+                :
+                <p>
+                  {this.state.cityData.display_name}
+                  {this.state.cityData.lat}
+                  {this.state.cityData.lon}
                 </p>
 
-          }
-                </div>
+            }
+          </div>
+
+          <img src={this.state.mapData} alt="map" />
         </Stack>
       </>
     );

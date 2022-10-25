@@ -5,6 +5,7 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import 'bootstrap/dist/css/bootstrap.min.css'
 import Stack from 'react-bootstrap/Stack';
+import Image from 'react-bootstrap/Image'
 
 
 
@@ -50,12 +51,12 @@ class App extends React.Component {
       let url = `https://us1.locationiq.com/v1/search?key=${process.env.REACT_APP_LOCATIONIQ_API_KEY}&q=${this.state.city}&format=json`
 
       console.log(url)
-      
 
-      
-   
-       response = await axios.get(url);
-    
+
+
+
+      response = await axios.get(url);
+
       console.log(response)
       let location = response.data[0];
 
@@ -67,12 +68,12 @@ class App extends React.Component {
         error: false,
         lat: location.lat,
         lon: location.lon,
-      }, ()=> {
+      }, () => {
         this.getMapData();
       });
 
       console.log(this.state.cityData)
-      
+
     } catch (error) {
       console.log(error);
       this.setState({
@@ -87,63 +88,71 @@ class App extends React.Component {
 
   getMapData = async () => {
 
-  console.log(this.state.lon);
-  let urlmap = `https://maps.locationiq.com/v3/staticmap?key=${process.env.REACT_APP_LOCATIONIQ_API_KEY}&center=${this.state.lat},${this.state.lon}&zoom=10`
+    console.log(this.state.lon);
+    let urlmap = `https://maps.locationiq.com/v3/staticmap?key=${process.env.REACT_APP_LOCATIONIQ_API_KEY}&center=${this.state.lat},${this.state.lon}&zoom=12`
 
 
-  console.log(process.env.REACT_APP_LOCATIONIQ_API_KEY)
+    console.log(process.env.REACT_APP_LOCATIONIQ_API_KEY)
 
-  let mapFind = await axios.get(urlmap);
-  console.log(mapFind)
-  const map = mapFind.config.url;
+    let mapFind = await axios.get(urlmap);
+    console.log(mapFind)
+    const map = mapFind.config.url;
 
-  this.setState({
-    mapData: map
-  })
+    this.setState({
+      mapData: map
+    })
     console.log(this.state.cityData.lat)
-  console.log(urlmap)
-}
+    console.log(urlmap)
+  }
 
   render() {
 
     return (
       <>
-        <Stack gap={2} className="col-md-5 mx-auto">
+        <body id='main'>
+          <main>
+          <Stack id="main" gap={2} className="col-md-5 mx-auto">
+            <h1 id="head">City Explorer</h1>
 
-          <Form onSubmit={this.getCityData}>
-            <Form.Group >
+            <Form onSubmit={this.getCityData}>
+              <Form.Group >
 
-              <div className="bg-light border">
-                <Form.Label>Pick a City!</Form.Label>
-              </div>
-              <Form.Control type="text" placeholder="Enter Location" onInput={this.handleInput} />
-
-
-              <Button variant="primary" id="mb" type='submit'>Explore!</Button>
-
-            </Form.Group>
-          </Form>
+                <div id='h2'className="bg-light border">
+                  <Form.Label id='formL' >Pick a city you would like to know more about! Scroll down after you click submit.</Form.Label>
+                </div>
+                <Form.Control type="text" placeholder="Enter Location" onInput={this.handleInput} />
 
 
-          {/* Ternary W ? T : F */}
-          <div className="bg-light border">
+                <Button variant="primary" id="mb" type='submit'>Explore!</Button>
+
+              </Form.Group>
+            </Form>
+
+
+
+
             {
 
               this.state.error
                 ?
                 <p>{this.state.errorMessage}</p>
                 :
-                <p>
+                <p id="text">
                   {this.state.cityData.display_name}
+                  <div></div>
                   {this.state.cityData.lat}
+                  <div></div>
                   {this.state.cityData.lon}
                 </p>
 
             }
-          </div>
 
-          <img src={this.state.mapData} alt="map" />
-        </Stack>
+
+            <Image id="img"src={this.state.mapData}
+              fluid />
+          </Stack>
+          </main>
+        </body>
       </>
     );
   }

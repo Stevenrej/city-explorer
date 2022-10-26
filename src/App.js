@@ -1,6 +1,7 @@
 import './App.css';
 import React from 'react';
 import axios from 'axios';
+import Weather from './Weather.js'
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import 'bootstrap/dist/css/bootstrap.min.css'
@@ -23,6 +24,11 @@ class App extends React.Component {
       mapData: '',
       lat: '',
       lon: '',
+      date: '',
+      low: '',
+      high: '',
+      description: '',
+      weatherApp: [],
 
     }
   }
@@ -32,9 +38,12 @@ class App extends React.Component {
   handleInput = (e) => {
     e.preventDefault();
     this.setState({
-      city: e.target.value
+      city: e.target.value.toLowerCase(),
     })
+
   }
+
+
 
   // async/await - handles our asynchronous code
   // try/catch - handles our promise - resolve a successful promise, or handles our errors with a rejected promise
@@ -50,19 +59,19 @@ class App extends React.Component {
       // define my URL to send to axios:
       let url = `https://us1.locationiq.com/v1/search?key=${process.env.REACT_APP_LOCATIONIQ_API_KEY}&q=${this.state.city}&format=json`
 
-      console.log(url)
+
 
 
 
 
       response = await axios.get(url);
 
-      console.log(response)
+
       let location = response.data[0];
 
 
-      console.log(location);
-      console.log(location.lat)
+
+
       this.setState({
         cityData: location,
         error: false,
@@ -70,9 +79,10 @@ class App extends React.Component {
         lon: location.lon,
       }, () => {
         this.getMapData();
+        this.getWeatherData();
       });
 
-      console.log(this.state.cityData)
+
 
     } catch (error) {
       console.log(error);
@@ -85,14 +95,25 @@ class App extends React.Component {
   }
 
 
+  getWeatherData = async () => {
+    let urlWeather = `${process.env.REACT_APP_SERVER}/weather?city_name=${this.state.city}&lat=${this.state.lat}&lon=${this.state.lon}`;
+    console.log(urlWeather);
+
+    let weatherData = await axios.get(urlWeather);
+    console.log(weatherData);
+    this.setState({
+      weatherApp: weatherData.data
+    })
+
+  }
+
+
 
   getMapData = async () => {
 
-    console.log(this.state.lon);
+
     let urlmap = `https://maps.locationiq.com/v3/staticmap?key=${process.env.REACT_APP_LOCATIONIQ_API_KEY}&center=${this.state.lat},${this.state.lon}&zoom=12`
 
-
-    console.log(process.env.REACT_APP_LOCATIONIQ_API_KEY)
 
     let mapFind = await axios.get(urlmap);
     console.log(mapFind)
@@ -101,8 +122,6 @@ class App extends React.Component {
     this.setState({
       mapData: map
     })
-    console.log(this.state.cityData.lat)
-    console.log(urlmap)
   }
 
   render() {
@@ -138,14 +157,21 @@ class App extends React.Component {
                 <p>{this.state.errorMessage}</p>
                 :
                 <p id="text">
+
                   {this.state.cityData.display_name}
                   <div></div>
                   {this.state.cityData.lat}
                   <div></div>
                   {this.state.cityData.lon}
+
                 </p>
 
             }
+              <Weather
+             weatherData={this.state.weatherApp}
+
+             />
+            
 
 
             <Image id="img"src={this.state.mapData}

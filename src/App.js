@@ -2,6 +2,7 @@ import './App.css';
 import React from 'react';
 import axios from 'axios';
 import Weather from './Weather.js'
+import Movie from './Movie.js'
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import 'bootstrap/dist/css/bootstrap.min.css'
@@ -29,6 +30,7 @@ class App extends React.Component {
       high: '',
       description: '',
       weatherApp: [],
+      movieArr: [],
 
     }
   }
@@ -80,6 +82,7 @@ class App extends React.Component {
       }, () => {
         this.getMapData();
         this.getWeatherData();
+        this.getMovieData();
       });
 
 
@@ -103,6 +106,19 @@ class App extends React.Component {
     console.log(weatherData);
     this.setState({
       weatherApp: weatherData.data
+    })
+
+  }
+
+
+  getMovieData = async () => {
+    let urlMovie = `${process.env.REACT_APP_SERVER}/movie?city_name=${this.state.city}`;
+    console.log(urlMovie);
+
+    let movieData = await axios.get(urlMovie);
+    console.log(movieData);
+    this.setState({
+      movieArr: movieData.data
     })
 
   }
@@ -176,6 +192,9 @@ class App extends React.Component {
 
             <Image id="img"src={this.state.mapData}
               fluid />
+
+              <Movie 
+              movieData={this.state.movieArr}/>
           </Stack>
           </main>
         </body>

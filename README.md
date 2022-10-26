@@ -21,6 +21,8 @@ Runs through an App.js and index.js. Languages used in this application are Java
 
 10-24-2022 7:35pm - Application now has a fully-functional server
 
+10-25-2022 9:08pm - Application is now connected to backend server
+
 
 Name of feature: Inital features
 
@@ -28,4 +30,12 @@ Name of feature: Inital features
 Start time: 0
 
 Finish time: 4.5 hours
+
+
+Name of feature: Connect to back end
+
+
+Start time: 0
+
+Finish time: 6 hours
 

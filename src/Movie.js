@@ -1,25 +1,22 @@
 import React, { Component } from 'react'
-import Card from 'react-bootstrap/Card';
+import MovieInd from './MovieInd';
 
 
 export default class Movie extends Component {
   render() {
-    console.log(this.props)
 
-   let data_movie = this.props.movieData.map((mov, idx) => (
+
+   let data_movie = this.props.movieData.map((mov) => {
       
-      <Card style={{ width: '18rem' }}>
-      <Card.Body>
-        <Card.Title>{mov.title}</Card.Title>
-        <Card.Subtitle className="mb-2 text-muted">{mov.realeasedOn}</Card.Subtitle>
-        <Card.Text>
-          {mov.overview}
-        </Card.Text>      
+      return <MovieInd
+      title={mov.title}
+      releasedOn={mov.realeasedOn}
+      overview={mov.overview}
+      imageUrl={mov.imageUrl}
+      />
 
-      </Card.Body>
-    </Card>
 
-   ));
+  });
     return (
       <div>
         {data_movie}

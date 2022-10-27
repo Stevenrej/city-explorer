@@ -5,6 +5,10 @@
 
 ![Request Response](./img/request_response.jpeg)
 
+![Request Response](./img/request-response.jpeg)
+
+![Request Response](./img/request-response2.jpeg)
+
 ## Overview
 
 This is an application that allows you to search for a city and obtain a excact location and map as well.
@@ -49,3 +53,9 @@ Start time: 0
 
 Finish time: 4.5 hours
 
+Name of feature: Refactored features
+
+
+Start time: 0
+
+Finish time: 1.5 hours

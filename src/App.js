@@ -145,56 +145,56 @@ class App extends React.Component {
       <>
         <body id='main'>
           <main>
-          <Stack id="main" gap={2} className="col-md-5 mx-auto">
-            <h1 id="head">City Explorer</h1>
+            <Stack id="main" gap={2} className="col-md-5 mx-auto">
+              <h1 id="head">City Explorer</h1>
 
-            <Form onSubmit={this.getCityData}>
-              <Form.Group >
-
-                <div id='h2'className="bg-light border">
-                  <Form.Label id='formL' >Pick a city you would like to know more about! Scroll down after you click submit.</Form.Label>
-                </div>
-                <Form.Control type="text" placeholder="Enter Location" onInput={this.handleInput} />
+              <Form onSubmit={this.getCityData}>
+                <Form.Group >
 
 
-                <Button variant="primary" id="mb" type='submit'>Explore!</Button>
+                    <Form.Label id='formL' >Pick a city you would like to know more about! Scroll down after you click explore!</Form.Label>
 
-              </Form.Group>
-            </Form>
-
+                  <Form.Control type="text" placeholder="Enter Location" onInput={this.handleInput} />
 
 
+                  <Button variant="primary" id="mb" type='submit'>Explore!</Button>
 
-            {
+                </Form.Group>
+              </Form>
 
-              this.state.error
-                ?
-                <p>{this.state.errorMessage}</p>
-                :
-                <p id="text">
 
-                  {this.state.cityData.display_name}
-                  <div></div>
-                  {this.state.cityData.lat}
-                  <div></div>
-                  {this.state.cityData.lon}
 
-                </p>
 
-            }
+              {
+
+                this.state.error
+                  ?
+                  <p>{this.state.errorMessage}</p>
+                  :
+                  <p id="text">
+
+                    {this.state.cityData.display_name}
+                    <div></div>
+                    {this.state.cityData.lat}
+                    <div></div>
+                    {this.state.cityData.lon}
+
+                  </p>
+
+              }
+              <Image id="img" src={this.state.mapData}
+                fluid />
               <Weather
-             weatherData={this.state.weatherApp}
+                weatherData={this.state.weatherApp}
 
-             />
-            
+              />
 
 
-            <Image id="img"src={this.state.mapData}
-              fluid />
 
-              <Movie 
-              movieData={this.state.movieArr}/>
-          </Stack>
+
+              <Movie
+                movieData={this.state.movieArr} />
+            </Stack>
           </main>
         </body>
       </>
